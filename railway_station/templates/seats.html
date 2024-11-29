@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seats</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #2e2e2e;
+            color: #ffffff;
+            margin: 0;
+            padding: 0;
+        }
+        h1 {
+            text-align: center;
+            margin-top: 20px;
+            color: #f4f4f4;
+        }
+        table {
+            width: 90%;
+            margin: 20px auto;
+            border-collapse: collapse;
+            background-color: #3e3e3e;
+        }
+        th, td {
+            padding: 15px;
+            text-align: center;
+            border: 1px solid #444;
+        }
+        th {
+            background-color: #444;
+            color: #fff;
+        }
+        tr:nth-child(even) {
+            background-color: #4f4f4f;
+        }
+        tr:hover {
+            background-color: #5e5e5e;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 14px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <h1>Seats for Route: {{ route[0] }} → {{ route[1] }}</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Seat Number</th>
+                <th>Class</th>
+                <th>Price</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for seat in seats %}
+            <tr>
+                <td>{{ seat[2] }}</td> <!-- Seat Number -->
+                <td>{{ seat[3] }}</td> <!-- Class -->
+                <td>${{ "%.2f" | format(seat[4]) }}</td> <!-- Price -->
+                <td>{{ "Available" if not seat[5] else "Booked" }}</td> <!-- Status -->
+                <td>
+                    {% if not seat[5] %}
+                    <form action="/book/{{ seat[0] }}" method="POST">
+                        <input type="hidden" name="wagon_class" value="{{ seat[3] }}">
+                        <button type="submit">Book</button>
+                    </form>
+                    {% else %}
+                    <span>Not Available</span>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
